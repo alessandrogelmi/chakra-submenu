@@ -17,15 +17,7 @@ import { HoverMenu, SubMenuButton, SubMenuList } from './SubMenu';
 export default function App() {
   return (
     <ChakraProvider>
-      <Flex
-        h="60px"
-        w="100%"
-        alignItems="center"
-        p={4}
-        textStyle="bodySmall"
-        // eslint-disable-next-line no-nested-ternary
-        background="gray.400"
-      >
+      <Flex h="4rem" w="100%" alignItems="center" p={4} background="#DCDCDC">
         <Spacer />
         <ProfileMenu menuOptions={data} />
       </Flex>
@@ -41,15 +33,16 @@ export const ProfileMenu = ({ menuOptions }: ProfileMenuProps) => {
   return (
     <HoverMenu closeOnSelect={false}>
       <MenuButton as={Button} colorSchema="blue.500">
-        My Profile
+        Profilo
       </MenuButton>
-      <MenuList color="gray.800">
+      <MenuList color="black">
         {menuOptions?.map((option) => {
           return option.hasSubMenu ? (
-            <MenuItem as={SubMenu} title="Apri" options={option.options}>
-              {' '}
-              SubMenu {option.title}{' '}
-            </MenuItem>
+            <MenuItem
+              as={SubMenu}
+              title={option.title}
+              options={option.options}
+            ></MenuItem>
           ) : (
             <MenuItem>{option.title}</MenuItem>
           );
@@ -61,7 +54,7 @@ export const ProfileMenu = ({ menuOptions }: ProfileMenuProps) => {
 
 interface SubMenuProps extends MenuButtonProps {
   title: string;
-  options: MenuListProps;
+  options: MenuListProps[];
 }
 
 const SubMenu = forwardRef<SubMenuProps, 'button'>(

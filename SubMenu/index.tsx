@@ -100,7 +100,7 @@ export function HoverMenu({ children, ...props }: MenuProps) {
       }}
     >
       <Menu
-        offset={parentMenu ? [-8, -4] : [0, 0]}
+        offset={parentMenu ? [0, 1] : [0, 0]}
         placement={parentMenu ? 'right-start' : 'bottom-end'}
         {...props}
       >
