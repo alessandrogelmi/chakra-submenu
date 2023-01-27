@@ -13,31 +13,60 @@ import { forwardRef } from 'react';
 import { data, MenuListProps } from './data';
 import './style.css';
 import { HoverMenu, SubMenuButton, SubMenuList } from './SubMenu';
+import CustomDivider from './CustomDivider';
 
 interface ProfileMenuProps {
   menuOptions: MenuListProps[];
 }
 
 const ProfileMenu = ({ menuOptions }: ProfileMenuProps) => {
+  const initialRef = React.useRef(null);
   return (
-    <HoverMenu>
-      <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />}>
-        Profilo
-      </MenuButton>
+    <HoverMenu initialFocusRef={initialRef}>
+      <MenuButton
+        as={IconButton}
+        aria-label="Options"
+        icon={<HamburgerIcon />}
+      ></MenuButton>
       <MenuList color="black">
-        {menuOptions?.map((option) => {
-          return option.hasSubMenu ? (
-            <MenuItem
-              as={SubMenu}
-              title={option.title}
-              options={option.options}
-            ></MenuItem>
-          ) : (
-            <MenuItem onClick={option.handleClick}>{option.title}</MenuItem>
-          );
+        {menuOptions?.map((item) => {
+          if (!item.isVisible) return null;
+          if (item.hasSubMenu) {
+            return (
+              <MenuItem
+                as={SubMenu}
+                title={item.title}
+                options={item.options}
+                ref={React.createRef()}
+              ></MenuItem>
+            );
+          }
+          if (item.options) {
+            return renderGroup(item);
+          }
+          return renderItem(item);
         })}
       </MenuList>
     </HoverMenu>
+  );
+};
+
+const renderItem = (item) => {
+  if (!item.isVisible) return null;
+  return <MenuItem onClick={item.handleClick}>{item.title}</MenuItem>;
+};
+
+const renderGroup = (item) => {
+  const { title, options } = item;
+  if (options.length === 0 || !item.isVisible) return null;
+  return (
+    <Flex flexDir="column">
+      {title && <CustomDivider title={title} />}
+      {options.map((opt) => {
+        if (!opt.isVisible) return null;
+        return renderItem(opt);
+      })}
+    </Flex>
   );
 };
 
@@ -56,7 +85,7 @@ const SubMenu = forwardRef<SubMenuProps, 'div'>(
         <SubMenuList>
           {options.map((subOption) => {
             return (
-              <MenuItem onClick={subOption.handleClick}>
+              <MenuItem onClick={subOption.handleClick} ref={React.createRef()}>
                 {subOption.title}
               </MenuItem>
             );

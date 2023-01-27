@@ -37,11 +37,13 @@ export const SubMenuButton = forwardRef<MenuButtonProps, 'button'>(
 
 export function HoverMenu({ children, ...props }: MenuProps) {
   const parentMenu = useMenuContext();
-  const [lastFocusedIndex, setLastFocusedIndex] = useState(-1);
+  const [lastFocusedIndex, setLastFocusedIndex] = useState(undefined);
+
   function blurAndSaveFocusedIndex() {
     setLastFocusedIndex(parentMenu.focusedIndex);
     parentMenu?.setFocusedIndex(-1);
   }
+
   function restoreLastFocusedIndex() {
     parentMenu?.setFocusedIndex(lastFocusedIndex);
   }
@@ -59,6 +61,7 @@ export function HoverMenu({ children, ...props }: MenuProps) {
       <Menu
         offset={parentMenu ? [0, 1] : [0, 0]}
         placement={parentMenu ? 'right-start' : 'bottom-end'}
+        isLazy
         {...props}
       >
         {(...args) => (
