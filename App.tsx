@@ -1,38 +1,27 @@
 import {
   ChakraProvider,
   Flex,
-  Spacer,
-  Button,
+  IconButton,
   MenuButton,
   MenuList,
   MenuItem,
   MenuButtonProps,
 } from '@chakra-ui/react';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import * as React from 'react';
 import { forwardRef } from 'react';
 import { data, MenuListProps } from './data';
 import './style.css';
 import { HoverMenu, SubMenuButton, SubMenuList } from './SubMenu';
 
-export default function App() {
-  return (
-    <ChakraProvider>
-      <Flex h="4rem" w="100%" alignItems="center" p={4} background="#DCDCDC">
-        <Spacer />
-        <ProfileMenu menuOptions={data} />
-      </Flex>
-    </ChakraProvider>
-  );
-}
-
 interface ProfileMenuProps {
   menuOptions: MenuListProps[];
 }
 
-export const ProfileMenu = ({ menuOptions }: ProfileMenuProps) => {
+const ProfileMenu = ({ menuOptions }: ProfileMenuProps) => {
   return (
-    <HoverMenu closeOnSelect={false}>
-      <MenuButton as={Button} colorSchema="blue.500">
+    <HoverMenu>
+      <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />}>
         Profilo
       </MenuButton>
       <MenuList color="black">
@@ -44,7 +33,7 @@ export const ProfileMenu = ({ menuOptions }: ProfileMenuProps) => {
               options={option.options}
             ></MenuItem>
           ) : (
-            <MenuItem>{option.title}</MenuItem>
+            <MenuItem onClick={option.handleClick}>{option.title}</MenuItem>
           );
         })}
       </MenuList>
@@ -57,19 +46,39 @@ interface SubMenuProps extends MenuButtonProps {
   options: MenuListProps[];
 }
 
-const SubMenu = forwardRef<SubMenuProps, 'button'>(
+const SubMenu = forwardRef<SubMenuProps, 'div'>(
   ({ title, options, ...props }, ref) => {
     return (
-      <HoverMenu closeOnSelect={false}>
+      <HoverMenu>
         <SubMenuButton ref={ref} {...props}>
           {title}
         </SubMenuButton>
         <SubMenuList>
           {options.map((subOption) => {
-            return <MenuItem>{subOption.title}</MenuItem>;
+            return (
+              <MenuItem onClick={subOption.handleClick}>
+                {subOption.title}
+              </MenuItem>
+            );
           })}
         </SubMenuList>
       </HoverMenu>
     );
   }
 );
+
+export default function App() {
+  return (
+    <ChakraProvider>
+      <Flex
+        w="100%"
+        alignItems="center"
+        p={4}
+        justifyContent="flex-end"
+        background="#DCDCDC"
+      >
+        <ProfileMenu menuOptions={data} />
+      </Flex>
+    </ChakraProvider>
+  );
+}

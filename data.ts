@@ -13,9 +13,11 @@ export interface MenuListProps {
 export const data: MenuListProps[] = [
   {
     title: 'Profilo',
+    handleClick: () => console.log('Profilo'),
   },
   {
     title: 'Impostazioni',
+    handleClick: () => console.log('Impostazioni'),
   },
   {
     title: 'Opzioni',
@@ -23,9 +25,11 @@ export const data: MenuListProps[] = [
     options: [
       {
         title: 'Esci',
+        handleClick: () => console.log('Esci'),
       },
       {
         title: 'Cambia Password',
+        handleClick: () => console.log('Cambio Password'),
       },
     ],
   },
