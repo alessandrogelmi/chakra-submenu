@@ -32,14 +32,7 @@ const ProfileMenu = ({ menuOptions }: ProfileMenuProps) => {
         {menuOptions?.map((item) => {
           if (!item.isVisible) return null;
           if (item.hasSubMenu) {
-            return (
-              <MenuItem
-                as={SubMenu}
-                title={item.title}
-                options={item.options}
-                ref={React.createRef()}
-              ></MenuItem>
-            );
+            return <MenuItem as={SubMenu} item={item}></MenuItem>;
           }
           if (item.options) {
             return renderGroup(item);
@@ -75,26 +68,18 @@ interface SubMenuProps extends MenuButtonProps {
   options: MenuListProps[];
 }
 
-const SubMenu = forwardRef<SubMenuProps, 'div'>(
-  ({ title, options, ...props }, ref) => {
-    return (
-      <HoverMenu>
-        <SubMenuButton ref={ref} {...props}>
-          {title}
-        </SubMenuButton>
-        <SubMenuList>
-          {options.map((subOption) => {
-            return (
-              <MenuItem onClick={subOption.handleClick} ref={React.createRef()}>
-                {subOption.title}
-              </MenuItem>
-            );
-          })}
-        </SubMenuList>
-      </HoverMenu>
-    );
-  }
-);
+const SubMenu = forwardRef<SubMenuProps, 'div'>(({ item, ...props }, ref) => {
+  return (
+    <HoverMenu>
+      <SubMenuButton {...props}>{item.title}</SubMenuButton>
+      <SubMenuList>
+        {item.options.map((subOption, index) => {
+          return renderItem(subOption);
+        })}
+      </SubMenuList>
+    </HoverMenu>
+  );
+});
 
 export default function App() {
   return (

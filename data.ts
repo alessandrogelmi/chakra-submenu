@@ -44,10 +44,12 @@ export const data: MenuListProps[] = [
     options: [
       {
         title: 'Area Protetta',
+        handleClick: () => console.log('Area Protetta'),
         isVisible: true,
       },
       {
         title: 'Elimina account',
+        handleClick: () => console.log('Elimina account'),
         isVisible: true,
       },
       {

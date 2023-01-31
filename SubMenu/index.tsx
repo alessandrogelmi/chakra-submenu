@@ -23,21 +23,21 @@ const ParentMenuContext = createContext<undefined | ParentMenuContext>(
   undefined
 );
 
-export const SubMenuButton = forwardRef<MenuButtonProps, 'button'>(
-  (props, ref) => {
-    function onClick(event: MouseEvent) {
+export const SubMenuButton = forwardRef<MenuButtonProps, any>(
+  (props: any, ref) => {
+    function onClick(event: any) {
       event.stopPropagation();
     }
 
     const buttonProps = useMenuButton(props, ref);
 
-    return <MenuItem ref={ref} {...props} {...buttonProps} onClick={onClick} />;
+    return <MenuItem {...buttonProps} onClick={onClick} />;
   }
 );
 
 export function HoverMenu({ children, ...props }: MenuProps) {
   const parentMenu = useMenuContext();
-  const [lastFocusedIndex, setLastFocusedIndex] = useState(undefined);
+  const [lastFocusedIndex, setLastFocusedIndex] = useState(-1);
 
   function blurAndSaveFocusedIndex() {
     setLastFocusedIndex(parentMenu.focusedIndex);
@@ -81,6 +81,15 @@ function HoverMenuInner(props: BoxProps) {
   );
 }
 
-export const SubMenuList = forwardRef<MenuListProps, 'button'>((props, ref) => {
-  return <MenuList ref={ref} {...props} />;
-});
+export const SubMenuList = forwardRef<MenuListProps, any>(
+  (props: any, ref: any) => {
+    return (
+      <MenuList
+        border="0"
+        boxShadow="0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.1)"
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
